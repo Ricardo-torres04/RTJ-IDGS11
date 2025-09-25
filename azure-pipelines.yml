@@ -1,0 +1,23 @@
+trigger:
+  - main   # Rama que activará el pipeline
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '18.x'  # versión de Node.js
+    displayName: 'Instalar Node.js'
+
+  - script: |
+      npm install
+      npm run build   # o el script que uses
+      npm test        # opcional
+    displayName: 'Instalar dependencias y ejecutar build/test'
+
+  # Publicar artefacto si se necesita (ejemplo para despliegue)
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathToPublish: '$(System.DefaultWorkingDirectory)'
+      artifactName: 'drop'
